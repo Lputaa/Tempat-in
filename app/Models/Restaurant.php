@@ -15,6 +15,17 @@ class Restaurant extends Model
      *
      * @var array<int, string>
      */
+    protected $fillable = [
+    'user_id',
+    'name',
+    'description',
+    'address',
+    'phone_number',
+    'opening_time',
+    'closing_time',
+    'is_active',
+    'profile_image_path' // <-- PASTIKAN INI ADA
+];
     protected $guarded = []; // Mengizinkan semua atribut untuk diisi (alternatif dari $fillable)
 
     public function user()

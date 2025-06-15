@@ -2,16 +2,22 @@
 
 @section('title', $restaurant->name)
 
-@section('content')
+@section('content') 
 <div>
-    <div class="h-64 md:h-80 bg-cover bg-center" style="background-image: url('{{ $restaurant->profile_image_path ? asset('storage/' . $restaurant->profile_image_path) : 'https://via.placeholder.com/1200x400.png?text=Tempat-In' }}');">
-        <div class="flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50">
-            <div class="text-center">
-                <h1 class="text-white text-3xl md:text-5xl font-bold">{{ $restaurant->name }}</h1>
-                <p class="text-gray-300 text-lg mt-2"><i class="fas fa-map-marker-alt mr-2"></i>{{ $restaurant->address }}</p>
-            </div>
+    @php
+    $backgroundImageUrl = $restaurant->profile_image_path 
+        ? asset('storage/' . $restaurant->profile_image_path) 
+        : 'https://via.placeholder.com/1200x400.png?text=Tempat-In';
+@endphp
+
+<div class="h-64 md:h-80 bg-cover bg-center" style="background-image: url('{{ $backgroundImageUrl }}')">
+    <div class="flex items-center justify-center h-full w-full">
+        <div class="text-center">
+            <h1 class="text-white text-3xl md:text-5xl font-bold">{{ $restaurant->name }}</h1>
+            <p class="text-gray-300 text-lg mt-2"><i class="fas fa-map-marker-alt mr-2"></i>{{ $restaurant->address }}</p>
         </div>
     </div>
+</div>
 
     <div class="container mx-auto px-6 py-12">
         <div class="lg:flex lg:space-x-12">
@@ -21,31 +27,59 @@
                     {{ $restaurant->description }}
                 </p>
 
-                <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 border-b-2 border-indigo-500 pb-2">Menu Kami</h3>
+                {{-- Bagian Paket Booking Opsional --}}
+                <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 border-b-2 border-indigo-500 pb-2">Paket Reservasi (Opsional)</h3>
+                <div class="mb-8">
+                    @if($bookingPackages->isEmpty())
+                        <p class="text-gray-500 dark:text-gray-400">Restoran ini tidak menawarkan paket booking khusus saat ini.</p>
+                    @else
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach ($bookingPackages as $package)
+                                <label for="package-{{ $package->id }}" class="cursor-pointer">
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-transparent has-[:checked]:border-indigo-500 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500">
+                                        <input type="radio" name="booking_package_id" id="package-{{ $package->id }}" value="{{ $package->id }}" class="hidden package-radio" data-name="{{ $package->name }}" data-price="{{ $package->price }}">
+                                        <img src="{{ $package->image_path ? asset('storage/' . $package->image_path) : 'https://via.placeholder.com/300x200' }}" alt="{{ $package->name }}" class="w-full h-32 object-cover rounded-t-lg">
+                                        <div class="p-4">
+                                            <h5 class="font-bold text-lg text-gray-900 dark:text-white">{{ $package->name }}</h5>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $package->description }}</p>
+                                            <p class="font-bold text-indigo-600 dark:text-indigo-400 mt-2 text-lg">Rp {{ number_format($package->price) }}</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+
+                <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 border-b-2 border-indigo-500 pb-2">Pre-Order Menu (Opsional)</h3>
                 
                 @if($menuGrouped->isEmpty())
                     <p class="text-gray-500 dark:text-gray-400">Menu untuk restoran ini belum tersedia.</p>
                 @else
-                    {{-- Looping per Kategori Menu --}}
                     @foreach ($menuGrouped as $category => $menuItems)
                         <div class="mb-8">
                             <h4 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">{{ $category }}</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {{-- Looping per Item Menu --}}
                                 @foreach ($menuItems as $item)
-                                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow flex flex-col justify-between">
-                                        <div>
-                                            <div class="flex justify-between">
-                                                <h5 class="font-semibold text-gray-900 dark:text-white">{{ $item->name }}</h5>
-                                                <p class="font-semibold text-gray-900 dark:text-white">Rp {{ number_format($item->price) }}</p>
+                                    {{-- Kartu Item Menu dengan Gambar --}}
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow flex items-start space-x-4 p-4">
+                                        <img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://via.placeholder.com/150' }}" 
+                                             alt="{{ $item->name }}" 
+                                             class="w-24 h-24 object-cover rounded-md flex-shrink-0">
+                                        <div class="flex-grow flex flex-col justify-between h-24">
+                                            <div>
+                                                <div class="flex justify-between">
+                                                    <h5 class="font-semibold text-gray-900 dark:text-white">{{ $item->name }}</h5>
+                                                    <p class="font-semibold text-gray-900 dark:text-white">Rp {{ number_format($item->price) }}</p>
+                                                </div>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ $item->description }}</p>
                                             </div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ $item->description }}</p>
-                                        </div>
-                                        {{-- Tombol Kontrol Kuantitas --}}
-                                        <div class="flex items-center justify-end mt-4">
-                                            <button type="button" data-id="{{ $item->id }}" data-action="decrease" class="cart-button bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold py-1 px-3 rounded-l">-</button>
-                                            <span id="quantity-{{ $item->id }}" class="bg-gray-100 dark:bg-gray-600 py-1 px-4">0</span>
-                                            <button type="button" data-id="{{ $item->id }}" data-name="{{ $item->name }}" data-price="{{ $item->price }}" data-action="increase" class="cart-button bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold py-1 px-3 rounded-r">+</button>
+                                            <div class="flex items-center justify-end">
+                                                <button type="button" data-id="{{ $item->id }}" data-action="decrease" class="cart-button bg-gray-200 dark:bg-gray-700 font-bold py-1 px-3 rounded-l">-</button>
+                                                <span id="quantity-{{ $item->id }}" class="bg-gray-100 dark:bg-gray-600 py-1 px-4">0</span>
+                                                <button type="button" data-id="{{ $item->id }}" data-name="{{ $item->name }}" data-price="{{ $item->price }}" data-action="increase" class="cart-button bg-gray-200 dark:bg-gray-700 font-bold py-1 px-3 rounded-r">+</button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -57,18 +91,22 @@
 
             <div class="w-full lg:w-1/3 mt-12 lg:mt-0">
                 <div class="sticky top-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white text-center mb-4">Pesanan Anda</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white text-center mb-4">Ringkasan & Reservasi</h3>
                     
                     <div id="cart-items" class="mb-4 max-h-48 overflow-y-auto">
-                        <p id="empty-cart-message" class="text-center text-gray-500">Keranjang Anda kosong.</p>
+                        <p id="empty-cart-message" class="text-center text-gray-500">Pilih paket atau menu untuk memulai.</p>
                     </div>
 
                     <hr class="my-4 border-gray-200 dark:border-gray-700">
 
                     {{-- Kalkulasi Harga --}}
                     <div class="space-y-2 text-sm">
+                        <div id="package-summary" class="hidden justify-between font-semibold">
+                            <span class="text-gray-600 dark:text-gray-400">Paket Booking</span>
+                            <span id="package-summary-price" class="text-gray-900 dark:text-white"></span>
+                        </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+                            <span class="text-gray-600 dark:text-gray-400">Subtotal Menu</span>
                             <span id="cart-subtotal" class="font-medium text-gray-900 dark:text-white">Rp 0</span>
                         </div>
                         <div class="flex justify-between">
@@ -90,20 +128,19 @@
                     {{-- Form Reservasi Utama --}}
                     <form id="reservation-form" action="{{ route('reservations.store') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="cart" id="cart-input">
                         <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
 
                         <div class="mb-4">
-                            <label for="reservation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal</label>
-                            <input type="date" id="reservation_date" name="reservation_date" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm" required>
+                            <label for="reservation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Tanggal</label>
+                            <input type="date" id="reservation_date" name="reservation_date" class="mt-1 block w-full rounded-md" required>
                         </div>
                         <div class="mb-4">
                             <label for="reservation_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Waktu</label>
-                            <input type="time" id="reservation_time" name="reservation_time" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm" required>
+                            <input type="time" id="reservation_time" name="reservation_time" class="mt-1 block w-full rounded-md" required>
                         </div>
                         <div class="mb-4">
                             <label for="number_of_guests" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah Tamu</label>
-                            <input type="number" id="number_of_guests" name="number_of_guests" min="1" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm" required>
+                            <input type="number" id="number_of_guests" name="number_of_guests" min="1" class="mt-1 block w-full rounded-md" required>
                         </div>
 
                         <button type="submit" class="w-full mt-4 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 font-bold text-lg">
@@ -116,30 +153,43 @@
     </div>
 </div>
 @endsection
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const cart = {};
-    const serviceFee = 5000; // Biaya layanan, bisa dibuat dinamis nanti dari database/config
-    const downPaymentPercentage = 0.5; // 50%
+    // State management
+    const cart = {
+        items: {},
+        selectedPackage: null
+    };
+    const serviceFee = 5000;
+    const downPaymentPercentage = 0.5;
 
-    // Fungsi untuk memformat angka ke Rupiah
+    // Elemen-elemen DOM
+    const cartItemsContainer = document.getElementById('cart-items');
+    const packageSummaryDiv = document.getElementById('package-summary');
+    const packageSummaryPrice = document.getElementById('package-summary-price');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const serviceFeeEl = document.getElementById('cart-service-fee');
+    const totalEl = document.getElementById('cart-total');
+    const downPaymentEl = document.getElementById('cart-down-payment');
+    const form = document.getElementById('reservation-form');
+
+    // Fungsi untuk format mata uang
     function formatCurrency(number) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
     }
 
-    // Fungsi untuk update tampilan keranjang dan total
-    function updateCartView() {
-        const cartItemsContainer = document.getElementById('cart-items');
-        const emptyCartMessage = document.getElementById('empty-cart-message');
-        let subtotal = 0;
-        
+    // Fungsi utama untuk update semua tampilan
+    function updateFullView() {
+        let menuSubtotal = 0;
         let cartContent = '';
 
-        if (Object.keys(cart).length > 0) {
-            for (const id in cart) {
-                const item = cart[id];
-                subtotal += item.price * item.quantity;
+        // Update tampilan item menu di keranjang
+        if (Object.keys(cart.items).length > 0) {
+            for (const id in cart.items) {
+                const item = cart.items[id];
+                menuSubtotal += item.price * item.quantity;
                 cartContent += `
                     <div class="flex justify-between items-center text-sm mb-1">
                         <div>
@@ -152,62 +202,91 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             cartItemsContainer.innerHTML = cartContent;
         } else {
-            cartItemsContainer.innerHTML = '<p id="empty-cart-message" class="text-center text-gray-500">Keranjang Anda kosong.</p>';
+             if (!cart.selectedPackage) {
+                cartItemsContainer.innerHTML = '<p id="empty-cart-message" class="text-center text-gray-500">Pilih paket atau menu untuk memulai.</p>';
+            } else {
+                cartItemsContainer.innerHTML = '';
+            }
         }
 
-        const total = subtotal > 0 ? subtotal + serviceFee : 0;
+        // Update tampilan paket yang dipilih
+        if (cart.selectedPackage) {
+            packageSummaryDiv.classList.remove('hidden');
+            packageSummaryDiv.classList.add('flex');
+            packageSummaryPrice.textContent = formatCurrency(cart.selectedPackage.price);
+        } else {
+            packageSummaryDiv.classList.add('hidden');
+            packageSummaryDiv.classList.remove('flex');
+        }
+
+        const packagePrice = cart.selectedPackage ? cart.selectedPackage.price : 0;
+        const currentServiceFee = menuSubtotal > 0 ? serviceFee : 0;
+        const total = packagePrice + menuSubtotal + currentServiceFee;
         const downPayment = total * downPaymentPercentage;
 
-        document.getElementById('cart-subtotal').textContent = formatCurrency(subtotal);
-        document.getElementById('cart-service-fee').textContent = formatCurrency(subtotal > 0 ? serviceFee : 0);
-        document.getElementById('cart-total').textContent = formatCurrency(total);
-        document.getElementById('cart-down-payment').textContent = formatCurrency(downPayment);
+        subtotalEl.textContent = formatCurrency(menuSubtotal);
+        serviceFeeEl.textContent = formatCurrency(currentServiceFee);
+        totalEl.textContent = formatCurrency(total);
+        downPaymentEl.textContent = formatCurrency(downPayment);
     }
 
-    // Tambahkan event listener ke semua tombol + dan -
+    // Event listener untuk tombol +/- pada item menu
     document.querySelectorAll('.cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const id = this.dataset.id;
             const action = this.dataset.action;
 
             if (action === 'increase') {
-                if (!cart[id]) {
-                    cart[id] = {
-                        name: this.dataset.name,
-                        price: parseInt(this.dataset.price),
-                        quantity: 0
-                    };
+                if (!cart.items[id]) {
+                    cart.items[id] = { name: this.dataset.name, price: parseInt(this.dataset.price), quantity: 0 };
                 }
-                cart[id].quantity++;
-            } else if (action === 'decrease' && cart[id]) {
-                cart[id].quantity--;
-                if (cart[id].quantity <= 0) {
-                    delete cart[id];
-                }
+                cart.items[id].quantity++;
+            } else if (action === 'decrease' && cart.items[id]) {
+                cart.items[id].quantity--;
+                if (cart.items[id].quantity <= 0) delete cart.items[id];
             }
             
-            const quantitySpan = document.getElementById(`quantity-${id}`);
-            if (quantitySpan) {
-                quantitySpan.textContent = cart[id] ? cart[id].quantity : 0;
+            document.getElementById(`quantity-${id}`).textContent = cart.items[id] ? cart.items[id].quantity : 0;
+            updateFullView();
+        });
+    });
+    
+    // Event listener untuk radio button paket
+    document.querySelectorAll('.package-radio').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked && cart.selectedPackage && cart.selectedPackage.id === this.value) {
+                this.checked = false;
+                cart.selectedPackage = null;
+            } else if (this.checked) {
+                cart.selectedPackage = { id: this.value, name: this.dataset.name, price: parseInt(this.dataset.price) };
             }
-
-            updateCartView();
+            updateFullView();
         });
     });
 
-    // Saat form di-submit, isi hidden input dengan data keranjang
-    document.getElementById('reservation-form').addEventListener('submit', function(event) {
-        const cartInput = document.getElementById('cart-input');
-        if (Object.keys(cart).length === 0) {
-            alert('Keranjang Anda kosong. Silakan pilih menu terlebih dahulu.');
-            event.preventDefault(); // Hentikan submit form
-            return;
+    // Event listener untuk submit form
+    form.addEventListener('submit', function(event) {
+        // Hapus input lama jika ada untuk menghindari duplikasi
+        document.querySelectorAll('input[name="booking_package_id"], input[name="cart_items"]').forEach(el => el.remove());
+
+        if (cart.selectedPackage) {
+            const packageInput = document.createElement('input');
+            packageInput.type = 'hidden';
+            packageInput.name = 'booking_package_id';
+            packageInput.value = cart.selectedPackage.id;
+            form.appendChild(packageInput);
         }
-        cartInput.value = JSON.stringify(cart);
+
+        if (Object.keys(cart.items).length > 0) {
+             const itemsInput = document.createElement('input');
+             itemsInput.type = 'hidden';
+             itemsInput.name = 'cart_items';
+             itemsInput.value = JSON.stringify(cart.items);
+             form.appendChild(itemsInput);
+        }
     });
-    
-    // Inisialisasi tampilan keranjang saat halaman dimuat
-    updateCartView();
+
+    updateFullView();
 });
 </script>
 @endpush

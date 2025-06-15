@@ -10,6 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Reservation extends Model
 {
+protected $fillable = [
+    'user_id',
+    'name',
+    'description',
+    'address',
+    'phone_number',
+    'opening_time',
+    'closing_time',
+    'is_active',
+    'profile_image_path' // <-- PASTIKAN INI ADA
+];
     protected $guarded = [];
 
 public function user()

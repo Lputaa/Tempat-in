@@ -3,77 +3,95 @@
 @section("content")
 
 <body class="bg-gray-50 dark:bg-gray-900 font-sans">
-    <header class="bg-white dark:bg-gray-900">
-        <div class="container mx-auto px-6 py-20 text-center">
-            <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4">Temukan dan Reservasi Tempat Favoritmu</h1>
-            <p class="text-gray-600 dark:text-gray-300 text-lg mb-8">Platform reservasi online untuk kafe dan restoran. Pesan meja, pilih menu, dan bayar semua dalam satu aplikasi. </p>
-            <div class="mt-8">
-                <input type="text" placeholder="Cari restoran atau kafe..." class="px-4 py-3 w-full md:w-1/2 rounded-l-lg border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600" />
-                <button class="px-8 rounded-r-lg bg-indigo-600 text-white font-bold p-3 uppercase border-indigo-600 border-t border-b border-r hover:bg-indigo-700">Cari Meja</button>
-            </div>
+<header class="bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-6 py-16 text-center">
+        <div class="mx-auto max-w-lg">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white md:text-4xl">Temukan & Reservasi Tempat Favoritmu Berikutnya</h1>
+            <p class="mt-6 text-gray-500 dark:text-gray-300">Hindari antrian dan ketidakpastian. Pesan mejamu dengan mudah melalui Tempat-In dan nikmati momen spesial tanpa khawatir.</p>
+            <a href="{{ route('register') }}" class="mt-8 inline-block rounded-md bg-indigo-600 px-8 py-3 text-sm font-medium text-white transition hover:bg-indigo-700">Daftar Sekarang</a>
+            <a href="{{ route('login') }}" class="mt-8 inline-block rounded-md bg-transparent px-8 py-3 text-sm font-medium text-indigo-600 transition hover:text-indigo-700">Login</a>
         </div>
-    </header>
+    </div>
+</header>
 
-    <section id="features" class="py-20 bg-gray-50 dark:bg-gray-900">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Reservasi Mudah dalam 3 Langkah</h2>
-            <div class="flex flex-wrap text-center">
-                <div class="w-full md:w-1/3 p-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
-                        <i class="fas fa-calendar-check text-4xl text-indigo-600 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">1. Reservasi Meja</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Pilih restoran, pilih tanggal & waktu, tentukan jumlah orang. </p>
+<section id="features" class="py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Reservasi Mudah dalam 3 Langkah</h2>
+        <div class="flex flex-wrap text-center">
+            <div class="w-full md:w-1/3 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-indigo-500 mb-4 inline-block rounded-full bg-indigo-100 p-4 dark:bg-indigo-900">
+                        <i class="fas fa-search-location fa-2x"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">1. Cari Restoran</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Temukan tempat makan atau kafe yang Anda inginkan berdasarkan lokasi atau nama.</p>
                 </div>
-                <div class="w-full md:w-1/3 p-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
-                        <i class="fas fa-utensils text-4xl text-indigo-600 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">2. Pesan Makanan</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Lihat menu restoran, pesan makanan dan minuman. </p>
+            </div>
+            <div class="w-full md:w-1/3 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                     <div class="text-indigo-500 mb-4 inline-block rounded-full bg-indigo-100 p-4 dark:bg-indigo-900">
+                        <i class="fas fa-calendar-check fa-2x"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">2. Pilih & Pesan</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Pilih tanggal, waktu, dan paket atau menu yang tersedia untuk dipesan di muka.</p>
                 </div>
-                <div class="w-full md:w-1/3 p-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
-                        <i class="fas fa-credit-card text-4xl text-indigo-600 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">3. Pembayaran Online</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Bayar menggunakan berbagai metode pembayaran. </p>
+            </div>
+            <div class="w-full md:w-1/3 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-indigo-500 mb-4 inline-block rounded-full bg-indigo-100 p-4 dark:bg-indigo-900">
+                        <i class="fas fa-credit-card fa-2x"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">3. Bayar & Nikmati</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Selesaikan pembayaran uang muka dengan aman dan reservasi Anda terkonfirmasi.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<section id="restaurants" class="py-20 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Restoran Pilihan Untukmu</h2>
 
-    <section id="restaurants" class="py-20 bg-white dark:bg-gray-800">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Restoran Pilihan Untukmu</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg">
-                    <img src="https://via.placeholder.com/400x300.png?text=Nama+Restoran" alt="Restaurant Image" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">Nama Restoran Contoh</h3>
-                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Deskripsi singkat tentang restoran, jenis masakan, atau suasana.</p>
-                        <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Lihat Detail & Menu</a>
-                    </div>
+        <div class="relative">
+            <div class="swiper restaurant-swiper">
+                <div class="swiper-wrapper">
+                    
+                    {{-- Looping data restoran dari controller --}}
+                    @forelse($featuredRestaurants as $restaurant)
+                        <div class="swiper-slide">
+                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg h-full flex flex-col transform hover:scale-105 transition-transform duration-300">
+                                <img src="{{ $restaurant->profile_image_path ? asset('storage/' . $restaurant->profile_image_path) : 'https://via.placeholder.com/400x300.png?text=Tempat-In' }}" 
+                                     alt="Foto {{ $restaurant->name }}" 
+                                     class="w-full h-48 object-cover">
+                                <div class="p-6 flex flex-col flex-grow">
+                                    <h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">{{ $restaurant->name }}</h3>
+                                    <p class="text-gray-700 dark:text-gray-300 text-base mb-4 flex-grow">
+                                        {{ Str::limit($restaurant->description, 100) }}
+                                    </p>
+                                    {{-- Link untuk tamu akan mengarah ke halaman login --}}
+                                    <a href="{{ route('login') }}" class="mt-4 inline-block self-start bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                                        Lihat & Reservasi
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide">
+                            <p class="text-center text-gray-500 col-span-3">Belum ada restoran yang terdaftar.</p>
+                        </div>
+                    @endforelse
+
                 </div>
-                <div class="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg">
-                    <img src="https://via.placeholder.com/400x300.png?text=Kafe+Asik" alt="Restaurant Image" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">Kafe Asik</h3>
-                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Tempat nongkrong yang nyaman dengan kopi terbaik di kota.</p>
-                        <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Lihat Detail & Menu</a>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg">
-                    <img src="https://via.placeholder.com/400x300.png?text=Dapur+Ibu" alt="Restaurant Image" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">Dapur Ibu</h3>
-                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Menyajikan masakan rumah dengan resep turun-temurun yang otentik.</p>
-                        <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Lihat Detail & Menu</a>
-                    </div>
-                </div>
+                
+                <div class="swiper-pagination mt-8"></div>
             </div>
+            
+            <!-- Custom Navigation Buttons -->
+            <div class="swiper-button-prev !w-12 !h-12 !bg-white dark:!bg-gray-700 !text-indigo-600 dark:!text-indigo-400 !rounded-full !shadow-lg hover:!bg-indigo-50 dark:hover:!bg-gray-600 !transition-all !duration-300 !border-2 !border-indigo-200 dark:!border-gray-600 after:!text-xl after:!font-bold !-left-6"></div>
+            <div class="swiper-button-next !w-12 !h-12 !bg-white dark:!bg-gray-700 !text-indigo-600 dark:!text-indigo-400 !rounded-full !shadow-lg hover:!bg-indigo-50 dark:hover:!bg-gray-600 !transition-all !duration-300 !border-2 !border-indigo-200 dark:!border-gray-600 after:!text-xl after:!font-bold !-right-6"></div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="partner" class="bg-indigo-700 text-white">
         <div class="container mx-auto px-6 py-20 text-center">
@@ -109,5 +127,52 @@
             </div>
         </div>
     </footer>
+    
 
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.restaurant-swiper', {
+            // Mengaktifkan loop agar slider bisa berputar terus
+            loop: true,
+            // Jumlah slide yang terlihat
+            slidesPerView: 1,
+            // Jarak antar slide
+            spaceBetween: 30,
+            
+            // Pengaturan responsif
+            breakpoints: {
+                // untuk layar 768px ke atas
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30
+                },
+                // untuk layar 1024px ke atas
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 40
+                }
+            },
+
+            // Mengaktifkan paginasi (titik-titik)
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+
+            // Mengaktifkan tombol navigasi (panah kiri/kanan)
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // Mengaktifkan autoplay
+            autoplay: {
+                delay: 4000, // delay 4 detik
+                disableOnInteraction: false, // autoplay tidak berhenti saat di-klik
+            },
+        });
+    });
+</script>
+@endpush

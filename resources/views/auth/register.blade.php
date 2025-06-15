@@ -1,8 +1,23 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Tempat-In</title>
+    
+    {{-- Skrip penting untuk menerapkan tema (terang/gelap) sebelum halaman render --}}
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
-@section('title', 'Daftar Akun Baru')
-
-@section('content')
+    {{-- Memuat aset dari Vite (CSS & JS) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
 <div class="container mx-auto max-w-md mt-12">
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
         <h1 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Buat Akun Baru</h1>
@@ -53,7 +68,32 @@
                     Daftar
                 </button>
             </div>
+                            {{-- Garis Pemisah --}}
+                <div class="my-6 flex items-center">
+                    <hr class="flex-grow border-t border-gray-300 dark:border-gray-600">
+                    <span class="mx-4 text-xs text-gray-400 dark:text-gray-500">Atau</span>
+                    <hr class="flex-grow border-t border-gray-300 dark:border-gray-600">
+                </div>
+
+                <div class="text-center">
+                    <a class="group relative inline-block overflow-hidden border border-indigo-600 px-8 py-3 focus:ring-3 focus:outline-none focus:ring-indigo-300 dark:focus:ring-indigo-800 rounded-md"
+                       href="{{ url('/') }}">
+                      {{-- Span untuk animasi, sekarang dari kanan --}}
+                      <span
+                        class="absolute inset-y-0 right-0 w-[2px] bg-indigo-600 transition-all group-hover:w-full group-active:bg-indigo-500"
+                      ></span>
+                    
+                      <span
+                        class="relative text-sm font-medium text-indigo-600 transition-colors group-hover:text-white"
+                      >
+                        Kembali
+                      </span>
+                    </a>
+                </div>
+
+            </form>
         </form>
     </div>
 </div>
-@endsection
+</body>
+</html>
