@@ -92,6 +92,20 @@
             <div class="w-full lg:w-1/3 mt-12 lg:mt-0">
                 <div class="sticky top-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                     <h3 class="text-2xl font-bold text-gray-800 dark:text-white text-center mb-4">Ringkasan & Reservasi</h3>
+
+                        {{-- ====================================================== --}}
+    {{-- == TAMBAHKAN BLOK KODE INI UNTUK MENAMPILKAN ERROR == --}}
+    {{-- ====================================================== --}}
+    @if ($errors->any())
+        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+            <strong class="font-bold">Oops! Ada yang salah:</strong>
+            <ul class="mt-2 list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
                     
                     <div id="cart-items" class="mb-4 max-h-48 overflow-y-auto">
                         <p id="empty-cart-message" class="text-center text-gray-500">Pilih paket atau menu untuk memulai.</p>
@@ -130,19 +144,35 @@
                         @csrf
                         <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
 
+                        {{-- Input Tanggal (tetap sama) --}}
                         <div class="mb-4">
-                            <label for="reservation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Tanggal</label>
-                            <input type="date" id="reservation_date" name="reservation_date" class="mt-1 block w-full rounded-md" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="reservation_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Waktu</label>
-                            <input type="time" id="reservation_time" name="reservation_time" class="mt-1 block w-full rounded-md" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="number_of_guests" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah Tamu</label>
-                            <input type="number" id="number_of_guests" name="number_of_guests" min="1" class="mt-1 block w-full rounded-md" required>
+                        <label for="reservation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal</label>
+                        <input type="date" id="reservation_date" name="reservation_date" class="mt-1 block w-full rounded-md" required>
                         </div>
 
+                        {{-- DROPDOWN BARU: Pilih Meja --}}
+                        <div class="mb-4">
+                        <label for="table_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Meja</label>
+                        <select id="table_id" name="table_id" class="mt-1 block w-full rounded-md" required>
+                            <option value="">-- Pilih Meja yang Tersedia --</option>
+                            @foreach($tables as $table)
+                                <option value="{{ $table->id }}">
+                                    {{ $table->name }} (Kapasitas: {{ $table->capacity }} orang)
+                                </option>
+                            @endforeach
+                        </select>
+                        </div>
+
+                        {{-- DROPDOWN BARU: Pilih Slot Waktu --}}
+                        <div class="mb-4">
+                        <label for="reservation_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Waktu</label>
+                        <select id="reservation_time" name="reservation_time" class="mt-1 block w-full rounded-md" required>
+                            <option value="">-- Pilih Slot Waktu --</option>
+                            @foreach($timeSlots as $slot)
+                                <option value="{{ $slot }}">{{ $slot }}</option>
+                            @endforeach
+                        </select>
+                        </div>
                         <button type="submit" class="w-full mt-4 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 font-bold text-lg">
                             Lanjut ke Pembayaran
                         </button>

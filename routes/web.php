@@ -15,6 +15,9 @@ use App\Http\Controllers\Auth\PartnerRegistrationController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\RestaurantController as SuperAdminRestaurantController;
+use App\Http\Controllers\Admin\TableController;
+
+use App\Http\Controllers\MidtransWebhookController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
@@ -57,6 +60,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
     Route::get('/my-reservations', [ReservationController::class, 'history'])->name('reservations.history');
     Route::delete('/my-reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+
+    Route::get('/reservations/{reservation}/payment', [ReservationController::class, 'payment'])->name('reservations.payment');
+    // routes/web.php (di dalam grup middleware 'auth' untuk user)
+Route::post('/my-reservations/{reservation}/reschedule', [ReservationController::class, 'requestReschedule'])->name('reservations.reschedule.request');
 });
 
 // Untuk ADMIN RESTORAN
@@ -69,7 +76,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('menu-items', MenuItemController::class);
     Route::resource('reservations', ReservationEditController::class)->only(['index', 'update', 'destroy']);
     Route::resource('packages', BookingPackageController::class);
-    
+    Route::resource('tables', TableController::class);
 });
 
 // Untuk SUPERADMIN
@@ -81,3 +88,5 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->name('supe
     
     Route::resource('restaurants', SuperAdminRestaurantController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 });
+
+Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle'])->name('midtrans.webhook');

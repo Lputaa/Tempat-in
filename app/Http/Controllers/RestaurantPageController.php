@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Restaurant; // <-- Import model Restaurant
+use App\Models\Restaurant;
+use Carbon\Carbon;
 
 class RestaurantPageController extends Controller
 {
@@ -20,24 +21,39 @@ class RestaurantPageController extends Controller
     /**
      * Menampilkan detail satu restoran (akan kita isi nanti).
      */
-        public function show(Restaurant $restaurant)
+     public function show(Restaurant $restaurant)
     {
-        // Pastikan restoran yang diakses aktif
         if (!$restaurant->is_active) {
             abort(404);
         }
 
-        // Ambil item menu dan kelompokkan berdasarkan kategori
+        // --- DATA YANG SUDAH ADA ---
         $menuGrouped = $restaurant->menuItems()->get()->groupBy('category');
-        
-        // AMBIL DATA PAKET HARGA (INI BAGIAN YANG HILANG)
         $bookingPackages = $restaurant->bookingPackages()->get();
 
-        // Kirim semua data yang diperlukan ke view
+        // --- LOGIKA BARU ---
+        
+        // 1. Ambil semua meja milik restoran ini
+        $tables = $restaurant->tables()->orderBy('name')->get();
+
+        // 2. Buat daftar slot waktu per 30 menit dari jam buka hingga jam tutup
+        $timeSlots = [];
+        $openingTime = Carbon::parse($restaurant->opening_time);
+        $closingTime = Carbon::parse($restaurant->closing_time);
+
+        // Loop dari jam buka hingga 1 jam sebelum tutup (asumsi durasi booking 1 jam)
+        while ($openingTime < $closingTime) {
+            $timeSlots[] = $openingTime->format('H:i');
+            $openingTime->addMinutes(30);
+        }
+        
+        // --- KIRIM SEMUA DATA KE VIEW ---
         return view('user.restaurants.show', [
             'restaurant' => $restaurant,
             'menuGrouped' => $menuGrouped,
-            'bookingPackages' => $bookingPackages // <-- KIRIM DATA PAKET
+            'bookingPackages' => $bookingPackages,
+            'tables' => $tables,           // <-- Data meja
+            'timeSlots' => $timeSlots,   // <-- Data slot waktu
         ]);
     }
 

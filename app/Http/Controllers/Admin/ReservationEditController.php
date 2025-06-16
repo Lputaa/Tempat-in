@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon; // <-- ADD THIS LINE
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,32 +27,52 @@ class ReservationEditController extends Controller
         // Pastikan ini mengarah ke view Anda
         return view('admin.restaurant.reservation', compact('reservations'));
     }
-        public function update(Request $request, Reservation $reservation)
-    {
-        // 1. Keamanan & Validasi (kode yang sudah ada)
-        if ($reservation->restaurant_id !== Auth::user()->restaurant->id) {
-            abort(403, 'AKSI TIDAK DIIZINKAN.');
-        }
-        $request->validate([
-            'status' => 'required|string|in:confirmed,cancelled',
-        ]);
+        // app/Http/Controllers/Admin/ReservationEditController.php
 
-        // 2. Update status reservasi (kode yang sudah ada)
-        $reservation->update(['status' => $request->status]);
-
-        // 3. KIRIM EMAIL NOTIFIKASI KE PENGGUNA
-        // Kita gunakan try-catch untuk mencegah error jika pengiriman email gagal
-        try {
-            Mail::to($reservation->user->email)->send(new ReservationStatusUpdated($reservation));
-        } catch (\Exception $e) {
-            // Opsional: catat error ke log jika email gagal terkirim
-            // Log::error('Gagal mengirim email update reservasi: ' . $e->getMessage());
-        }
-        
-        // 4. Redirect kembali dengan pesan sukses (kode yang sudah ada)
-        return redirect()->back()->with('success', 'Status reservasi berhasil diperbarui dan notifikasi telah dikirim.');
+public function update(Request $request, Reservation $reservation)
+{
+    // Keamanan: Pastikan reservasi ini milik restoran admin yang login
+    if ($reservation->restaurant_id !== Auth::user()->restaurant->id) {
+        abort(403, 'AKSI TIDAK DIIZINKAN.');
     }
 
+    // Validasi input status dari dropdown
+    $validated = $request->validate([
+        'status' => 'required|string|in:pending,confirmed,cancelled',
+    ]);
+
+    // Jika admin menyetujui reservasi yang tadinya reschedule,
+    // kita harus update tanggalnya sebelum mengubah status.
+    if ($reservation->status == 'reschedule_pending' && $validated['status'] == 'confirmed') {
+        
+        // Cek ketersediaan lagi untuk tanggal baru
+        $isBooked = Reservation::where('table_id', $reservation->table_id)
+                             ->where('reservation_date', $reservation->reschedule_request_date)
+                             ->where('reservation_time', $reservation->reschedule_request_time)
+                             ->where('id', '!=', $reservation->id)
+                             ->where('status', '!=', 'cancelled')
+                             ->exists();
+
+        if ($isBooked) {
+            return redirect()->back()->with('error', 'Gagal menyetujui. Jadwal baru yang diajukan sudah dipesan orang lain.');
+        }
+
+        // Update ke jadwal baru & bersihkan data pengajuan
+        $reservation->update([
+            'reservation_date' => $reservation->reschedule_request_date,
+            'reservation_time' => $reservation->reschedule_request_time,
+            'reschedule_request_date' => null,
+            'reschedule_request_time' => null,
+        ]);
+    }
+
+    // Update status utama
+    $reservation->update([
+        'status' => $validated['status']
+    ]);
+
+    return redirect()->back()->with('success', 'Status reservasi berhasil diperbarui.');
+}
 
     public function destroy(Reservation $reservation)
     {

@@ -24,19 +24,19 @@
         <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Paket</label>
             {{-- HANYA MENGGUNAKAN old() --}}
-            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Contoh: Booking Meja Standar" class="mt-1 block w-full rounded-md" required>
+            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Contoh: Booking Meja Standar" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 block text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 shadow-sm" required>
         </div>
 
         <div class="mb-4">
             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi (Opsional)</label>
             {{-- HANYA MENGGUNAKAN old() --}}
-            <textarea name="description" id="description" rows="3" placeholder="Jelaskan tentang paket ini" class="mt-1 block w-full rounded-md">{{ old('description') }}</textarea>
+            <textarea name="description" id="description" rows="3" placeholder="Jelaskan tentang paket ini" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 block text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 shadow-sm">{{ old('description') }}</textarea>
         </div>
 
         <div class="mb-6">
             <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Harga (Rp)</label>
             {{-- HANYA MENGGUNAKAN old() --}}
-            <input type="number" name="price" id="price" value="{{ old('price') }}" placeholder="Contoh: 25000 (tanpa titik atau koma)" class="mt-1 block w-full rounded-md" required>
+            <input type="number" name="price" id="price" value="{{ old('price') }}" placeholder="Contoh: 25000 (tanpa titik atau koma)" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 block text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 shadow-sm" required>
         </div>
 
         <div class="mb-6">

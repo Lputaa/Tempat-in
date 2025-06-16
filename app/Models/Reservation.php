@@ -2,41 +2,36 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
 
 class Reservation extends Model
 {
-protected $fillable = [
-    'user_id',
-    'name',
-    'description',
-    'address',
-    'phone_number',
-    'opening_time',
-    'closing_time',
-    'is_active',
-    'profile_image_path' // <-- PASTIKAN INI ADA
-];
+    /**
+     * TAMBAHKAN BARIS INI.
+     * Ini memberitahu Laravel untuk mengizinkan SEMUA kolom diisi.
+     * Ini adalah cara termudah selama masa pengembangan.
+     */
     protected $guarded = [];
 
-public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-public function restaurant()
-{
-    return $this->belongsTo(Restaurant::class);
-}
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 
-public function menuItems(): BelongsToMany
+    public function menuItems(): BelongsToMany
+    {
+        return $this->belongsToMany(MenuItem::class)
+                    ->withPivot('quantity', 'price');
+    }
+    public function table(): BelongsTo
 {
-    return $this->belongsToMany(MenuItem::class)
-                ->withPivot('quantity', 'price'); // Penting: agar kita bisa akses jumlah & harga
+    return $this->belongsTo(Table::class);
 }
-
 }

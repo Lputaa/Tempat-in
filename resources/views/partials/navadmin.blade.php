@@ -31,6 +31,12 @@
         <span class="mx-4">Kelola Paket Harga</span>
     </a>
 
+        <a href="{{ route('admin.tables.index') }}" class="{{ $linkClass }} {{ request()->routeIs('admin.tables.*') ? $activeClass : '' }}">
+        <i class="fas fa-chair w-6"></i>
+        <span class="mx-4">Manajemen Meja</span>
+    </a>
+
+
         </a>
         <a href="{{ route('admin.reservations.index') }}" class="{{ $linkClass }} {{ request()->routeIs('admin.reservations.*') ? $activeClass : '' }}">
             <i class="fas fa-calendar-check w-6"></i>
